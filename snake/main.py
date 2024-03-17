@@ -18,14 +18,14 @@ if __name__ == '__main__':
     score.increase_score()
 
     while game_is_on:
-        time.sleep(0.03)
+        time.sleep(0.5)
         snake.move()
-        if snake.list_of_snakes[2].distance(food) < 15:
+        if snake.list_of_snakes[0].distance(food) < 15:
             food.refresh_food()
             score.increase_score()
             snake.add_segment()
-        elif snake.list_of_snakes[2].xcor() > 280 or snake.list_of_snakes[2].xcor() < -280 or snake.list_of_snakes[
-            2].ycor() > 280 or snake.list_of_snakes[2].ycor() < -280:
+        elif snake.list_of_snakes[0].xcor() > 280 or snake.list_of_snakes[2].xcor() < -280 or snake.list_of_snakes[
+            0].ycor() > 280 or snake.list_of_snakes[0].ycor() < -280:
             game_is_on = False
             score.game_over()
 
