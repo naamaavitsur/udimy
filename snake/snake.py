@@ -25,8 +25,11 @@ class Snake:
         snake_segment.color("red")
         snake_segment.penup()
         snake_segment.speed("fast")
-        self.list_of_snakes.append(snake_segment)
-        print(self.list_of_snakes)
+        self.list_of_snakes.insert(0, snake_segment)
+        segment_x = self.list_of_snakes[1].xcor()
+        segment_y = self.list_of_snakes[1].ycor()
+        self.list_of_snakes[0].goto(segment_x, segment_y)
+
 
     # def extend_snake(self):
 
@@ -52,10 +55,10 @@ class Snake:
         self.screen.onkey(turn_up, "Up")
         self.screen.onkey(turn_down, "Down")
 
+        for i in range(0, len(self.list_of_snakes)-1, 1):
+            segment_x = self.list_of_snakes[i+1].xcor()
+            segment_y = self.list_of_snakes[i+1].ycor()
+            self.list_of_snakes[i].goto(segment_x, segment_y)
+        self.list_of_snakes[-1].forward(20)
 
-        for i in range(0, len(self.list_of_snakes), -1):
-            segment_x = self.list_of_snakes[i].xcor()
-            segment_y = self.list_of_snakes[i].ycor()
-            self.list_of_snakes[i+1].goto(segment_x, segment_y)
-        self.list_of_snakes[0].forward(20)
 
