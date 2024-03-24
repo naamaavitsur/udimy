@@ -6,6 +6,7 @@ from disc import Disc
 from ball import Ball
 import config
 
+
 if __name__ == '__main__':
     game_is_on = True
     screen = Screen()
@@ -20,15 +21,37 @@ if __name__ == '__main__':
     ball = Ball()
     # left_score.update_score()
     screen.listen()
-    disc_left.move_disc("Up", "Down")
-    disc_right.move_disc("a", "z")
+    disc_left.move_disc("a", "z")
+    disc_right.move_disc("Up", "Down")
 
     while game_is_on:
+        time.sleep(0.02)
         screen.update()
-        screen.tracer(1)
-        ball.find_new_direction_for_ball(0, 360)
-        if ball.ball.ycor() > 485 and ball.ball.ycor() < -480:
-            ball.find_new_direction_for_ball(180,360)
+        ball.move()
+        if ball.ball.ycor() > 480 or ball.ball.ycor() < -480:
+            ball.bounce_hit_y()
+        elif ball.ball.distance(disc_right.disc) < 50 and ball.ball.xcor() > 670 or ball.ball.distance(disc_left.disc) < 50 and ball.ball.xcor() > -740:
+            ball.bounce_hit_x()
+        elif ball.ball.xcor() > 750:
+            right_score.update_score()
+            screen.tracer(0)
+            ball.bounce_hit_x()
+            ball.ball.goto(0, 0)
+        elif ball.ball.xcor() < -750:
+            left_score.update_score()
+            ball.bounce_hit_x()
+            screen.tracer(0)
+            ball.ball.goto(0, 0)
+        elif left_score.score_point == 10 or right_score.score_point == 10:
+            game_is_on = False
+
+
+
+
+
+
+
+
 
 
 
