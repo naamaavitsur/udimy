@@ -8,7 +8,7 @@ import time
 level_number = 1
 game_is_on = True
 timer_create_cars = 6
-time_sleep = 0.1
+car_distance = 20
 screen = Screen()
 screen.tracer(0)
 screen.setup(600, 600)
@@ -19,12 +19,12 @@ screen.onkey(player_turtle.move, "Up")
 car_meneger = Cars()
 
 while game_is_on:
-    time.sleep(time_sleep)
+    time.sleep(0.1)
     screen.update()
     if timer_create_cars % 6 == 0:
         car_meneger.create_cars()
     for i in car_meneger.list_of_cars:
-        new_x = i.xcor() - 20
+        new_x = i.xcor() - car_distance
         i.goto(new_x, i.ycor())
         if player_turtle.distance(i) < 20:
             car_meneger.game_over()
@@ -35,7 +35,7 @@ while game_is_on:
         level_number += 1
         level_update.clear()
         level_update = Level(level_number)
-        time_sleep -= 0.02
+        car_distance += 5
     timer_create_cars += 1
 
 
