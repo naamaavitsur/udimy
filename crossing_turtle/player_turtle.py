@@ -2,10 +2,13 @@ from turtle import Turtle
 
 class PlayerTurtle(Turtle):
 
+
     def __init__(self):
         super().__init__()
-        self.("turtle")
+        self.shape("turtle")
         self.penup()
-        self.goto(0, 250)
+        self.setheading(90)
+        self.goto(0, -270)
 
-
+    def move(self):
+        self.forward(20)
