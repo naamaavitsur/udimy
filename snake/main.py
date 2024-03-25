@@ -22,14 +22,15 @@ if __name__ == '__main__':
         snake.move()
         if snake.list_of_snakes[-1].distance(food) < 15:
             food.refresh_food()
+            score.pluse_one()
             score.increase_score()
             snake.add_segment()
         elif snake.list_of_snakes[-1].xcor() > 280 or snake.list_of_snakes[-1].xcor() < -280 or snake.list_of_snakes[-1].ycor() > 280 or snake.list_of_snakes[-1].ycor() < -280:
-            game_is_on = False
-            score.game_over()
+            score.reset()
+            snake.reset()
         for segment in snake.list_of_snakes[:-1]:
             if snake.list_of_snakes[-1].distance(segment) < 10:
-                game_is_on = False
-                score.game_over()
+                score.reset()
+                snake.reset()
 
     screen.exitonclick()

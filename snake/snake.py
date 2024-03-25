@@ -1,5 +1,4 @@
-import time
-from turtle import Turtle
+from turtle import Turtle, Screen
 
 
 class Snake:
@@ -11,6 +10,7 @@ class Snake:
 
     def snake(self):
         place = 0
+        self.screen.tracer(0)
         for goto in self.list_of_where_start_snake:
             snake_segment = Turtle("square")
             snake_segment.color("red")
@@ -19,8 +19,19 @@ class Snake:
             snake_segment.goto(self.list_of_where_start_snake[place])
             place += 1
             self.list_of_snakes.append(snake_segment)
+        self.screen.tracer(1)
+
+    def reset(self):
+        self.screen.tracer(0)
+        for i in self.list_of_snakes:
+            i.goto(-1000, -1000)
+        self.screen.tracer(1)
+        self.list_of_snakes = []
+        self.snake()
 
     def add_segment(self):
+        screen = Screen()
+        screen.tracer(0)
         snake_segment = Turtle("square")
         snake_segment.color("red")
         snake_segment.penup()
@@ -29,6 +40,7 @@ class Snake:
         segment_x = self.list_of_snakes[1].xcor()
         segment_y = self.list_of_snakes[1].ycor()
         self.list_of_snakes[0].goto(segment_x, segment_y)
+        screen.tracer(1)
 
 
     # def extend_snake(self):

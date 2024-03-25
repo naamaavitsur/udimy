@@ -13,6 +13,15 @@ class Score:
         self.title.shapesize(0.5, 2, 2)
         self.title.hideturtle()
         self.score = 0
+        self.high_score = 0
+
+    def reset(self):
+        if self.high_score < self.score:
+            self.high_score = self.score
+        self.score = 0
+        self.increase_score()
+
+
 
     def pluse_one(self):
         self.score += 1
@@ -21,9 +30,9 @@ class Score:
         self.title.goto(0, 280)
         self.title.color("white")
         self.title.clear()
-        self.title.write(f"score: {self.score}", False, ALIGNMENT,
+        self.title.write(f"Score: {self.score}, High score:{self.high_score}", False, ALIGNMENT,
                          FONT)
-        self.pluse_one()
+
 
     def game_over(self):
         self.title.goto(0, 0)
