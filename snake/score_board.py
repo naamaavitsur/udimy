@@ -12,16 +12,17 @@ class Score:
         self.title.speed("fastest")
         self.title.shapesize(0.5, 2, 2)
         self.title.hideturtle()
+        with open("high_score.txt", "r") as high_score:
+            self.high_score = int(high_score.read())
         self.score = 0
-        self.high_score = 0
 
     def reset(self):
         if self.high_score < self.score:
             self.high_score = self.score
+            with open("high_score.txt", "w") as high_score:
+                high_score.write(str(self.high_score))
         self.score = 0
         self.increase_score()
-
-
 
     def pluse_one(self):
         self.score += 1
@@ -32,7 +33,6 @@ class Score:
         self.title.clear()
         self.title.write(f"Score: {self.score}, High score:{self.high_score}", False, ALIGNMENT,
                          FONT)
-
 
     def game_over(self):
         self.title.goto(0, 0)
