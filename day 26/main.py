@@ -18,11 +18,19 @@
 # print(passed_student)
 
 import pandas
-data = pandas.read_csv("nato_phonetic_alphabet.csv")
-new_dict = {row.letter:row.code for (index, row) in data.iterrows()}
-word = input("please write word you want to read: ").upper()
-return_list = [new_dict[letter] for letter in word]
-print(return_list)
+is_it_on = True
+while is_it_on:
+    data = pandas.read_csv("nato_phonetic_alphabet.csv")
+    new_dict = {row.letter:row.code for (index, row) in data.iterrows()}
+    word = input("please write word you want to read: ").upper()
+    try:
+        return_list = [new_dict[letter] for letter in word]
+    except KeyError:
+        print("sorry, please insert letter: ")
+    else:
+        print(return_list)
+        is_it_on = False
+
 
 
 
