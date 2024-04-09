@@ -4,6 +4,7 @@ import datetime as dt
 import time
 from random import choice
 import pandas
+import logging
 
 
 
@@ -18,7 +19,7 @@ hour = now.hour
 month = now.month
 day = now.day
 
-print(now.minute)
+logging.info(now.minute)
 bd_data = pandas.read_csv("data.csv")
 same_day = bd_data[bd_data.day == day]
 same_day_and_month = same_day[same_day.month == month]
