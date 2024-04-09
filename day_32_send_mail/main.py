@@ -41,7 +41,7 @@ while True:
                 connection.sendmail(from_addr=my_email, to_addrs=list_of_emails[place],
                                     msg=f"subject:Love Letter\n\n{send_letter}")
             place +=1
-            time.sleep(60)
+            time.sleep(20)
 
 
 # better way to acess the data:
