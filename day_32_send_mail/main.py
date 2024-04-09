@@ -1,6 +1,7 @@
 import os
 import smtplib
 import datetime as dt
+import time
 from random import choice
 import pandas
 
@@ -17,6 +18,7 @@ hour = now.hour
 month = now.month
 day = now.day
 
+print(now.minute)
 bd_data = pandas.read_csv("data.csv")
 same_day = bd_data[bd_data.day == day]
 same_day_and_month = same_day[same_day.month == month]
@@ -24,23 +26,26 @@ list_of_names = same_day_and_month["name"].to_list()
 list_of_emails = same_day_and_month["email"].to_list()
 list_of_letters = ["first_letter.txt", "second_letter.txt"]
 place = 0
-# for name in list_of_names:
-#     letter_to_send = choice(list_of_letters)
-#     with open(letter_to_send, "r") as letter_to_send:
-#         new_letter = letter_to_send.read()
-#     send_letter = new_letter.replace("[Name]", name)
-#     with smtplib.SMTP("smtp.gmail.com") as connection:
-#         connection.starttls()
-#         connection.login(user=my_email, password=my_password)
-#         connection.sendmail(from_addr=my_email, to_addrs=list_of_emails[place],
-#                             msg=f"subject:Love Letter\n\n{send_letter}")
-#     print(send_letter)
-#     place +=1
+
+while True:
+    if now.hour == 18 and now.minute == 17:
+        for name in list_of_names:
+            letter_to_send = choice(list_of_letters)
+            with open(letter_to_send, "r") as letter_to_send:
+                new_letter = letter_to_send.read()
+            send_letter = new_letter.replace("[Name]", name)
+            with smtplib.SMTP("smtp.gmail.com") as connection:
+                connection.starttls()
+                connection.login(user=my_email, password=my_password)
+                connection.sendmail(from_addr=my_email, to_addrs=list_of_emails[place],
+                                    msg=f"subject:Love Letter\n\n{send_letter}")
+            place +=1
+            time.sleep(60)
 
 
 # better way to acess the data:
-new_dict = {(column["day"], column["month"]):(column["email"], column["name"]) for (index, column) in bd_data.iterrows()}
-print(new_dict)
+# new_dict = {(column["day"], column["month"]):(column["email"], column["name"]) for (index, column) in bd_data.iterrows()}
+# print(new_dict)
 
 # Angela solution:
 # from datetime import datetime
