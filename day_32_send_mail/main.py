@@ -27,8 +27,9 @@ list_of_emails = same_day_and_month["email"].to_list()
 list_of_letters = ["first_letter.txt", "second_letter.txt"]
 place = 0
 
+
 while True:
-    if now.hour == 18 and now.minute == 17:
+    if now.hour == 18 and now.minute == 35:
         for name in list_of_names:
             letter_to_send = choice(list_of_letters)
             with open(letter_to_send, "r") as letter_to_send:
