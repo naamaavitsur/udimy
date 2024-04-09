@@ -18,7 +18,7 @@ if __name__ == '__main__':
     score.increase_score()
 
     while game_is_on:
-        time.sleep(0.019)
+        time.sleep(0.03)
         snake.move()
         if snake.list_of_snakes[-1].distance(food) < 15:
             food.refresh_food()
