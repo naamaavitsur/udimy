@@ -28,9 +28,14 @@ list_of_emails = same_day_and_month["email"].to_list()
 list_of_letters = ["first_letter.txt", "second_letter.txt"]
 place = 0
 
-
+print("shay-print")
+logging.info('shay-info')
 while True:
-    if now.hour == 18 and now.minute == 35:
+    logging.info(now)
+    print("444444")
+    logging.info('55555')
+    logging.info(now)
+    if now.hour == 18 and now.minute == 53:
         for name in list_of_names:
             letter_to_send = choice(list_of_letters)
             with open(letter_to_send, "r") as letter_to_send:
