@@ -31,11 +31,11 @@ place = 0
 print("shay-print")
 logging.info('shay-info')
 while True:
-    logging.info(now)
-    print("444444")
+    time.sleep(5)
     logging.info('55555')
     logging.info(now)
-    if now.hour == 18 and now.minute == 53:
+    if now.hour == 18 and now.minute == 56:
+        print('time to send mail')
         for name in list_of_names:
             letter_to_send = choice(list_of_letters)
             with open(letter_to_send, "r") as letter_to_send:
