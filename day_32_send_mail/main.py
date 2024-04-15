@@ -19,7 +19,6 @@ hour = now.hour
 month = now.month
 day = now.day
 
-logging.info(now.minute)
 bd_data = pandas.read_csv("data.csv")
 same_day = bd_data[bd_data.day == day]
 same_day_and_month = same_day[same_day.month == month]
@@ -28,8 +27,7 @@ list_of_emails = same_day_and_month["email"].to_list()
 list_of_letters = ["first_letter.txt", "second_letter.txt"]
 place = 0
 
-print("shay-print")
-logging.info('shay-info')
+
 while True:
     time.sleep(5)
     logging.info('55555')

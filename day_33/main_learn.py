@@ -32,3 +32,4 @@ hour_now = time_now.hour
 print(f"the sunrise: {sunrise}")
 print(f"the susnset: {sunset}")
 print(f"the time now: {hour_now}")
+
