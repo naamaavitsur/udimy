@@ -1,3 +1,4 @@
+import os
 import time
 
 import requests
@@ -28,8 +29,8 @@ if not will_rain:
     messege = "dont bring umbrella"
     print(messege)
 
-account_sid = 'AC06c13f5ccf2581297b896477d328012e'
-auth_token = 'e5377962b1861e267991c33f5dd4bd7e'
+account_sid = os.getenv("ACCOUNT_SID")
+auth_token = os.environ.get("AUTH_TOKEN")
 client = Client(account_sid, auth_token)
 
 message = client.messages.create(

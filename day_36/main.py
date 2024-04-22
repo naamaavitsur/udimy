@@ -21,8 +21,8 @@ for i in response_jason:
         number_whithout_mail += 1
 print("have all the data")
 
-account_sid = 'AC06c13f5ccf2581297b896477d328012e'
-auth_token = 'e5377962b1861e267991c33f5dd4bd7e'
+account_sid = os.getenv("ACCOUNT_SID")
+auth_token = os.environ.get("AUTH_TOKEN")
 client = Client(account_sid, auth_token)
 
 message = client.messages.create(
