@@ -16,10 +16,10 @@ def list_of_destination_info(iata_flight_to, iata_flight_from, max_price):
     params_kiwi = {
         'fly_from': iata_flight_from,
         'fly_to': iata_flight_to,
-        'date_from': '01/05/2024',
-        'date_to': '15/05/2024',
-        'return_from': '04/05/2024',
-        'return_to': '20/05/2024',
+        'date_from': '01/08/2024',
+        'date_to': '15/08/2024',
+        'return_from': '04/08/2024',
+        'return_to': '20/08/2024',
     }
 
     response = requests.get(url=URL_KIWI, headers=header_kiwi, params=params_kiwi)

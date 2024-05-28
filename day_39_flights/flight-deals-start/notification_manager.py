@@ -1,10 +1,13 @@
 from twilio.rest import Client
 import os
 import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 account_sid = os.getenv("ACCOUNT_SID")
 auth_token = os.environ.get("AUTH_TOKEN")
 my_password = os.getenv('GMAIL_PASS')
+my_email = "naamaavit@gmail.com"
 
 
 class SendMessage:
@@ -18,8 +21,9 @@ class SendMessage:
             self.city_from = dict["city_from"]
             date = self.date[:10]
             hour = self.date[11:16]
-            self.body += f"From: {self.city_from} at {date}, {hour} to {self.destination}. price:{self.price}\n"
-            self.send_mail(mail)
+            self.body += f"From: {self.city_from} at {date}, {hour} \nTo: {self.destination}. \nprice: {self.price}\n\n"
+        # self.send_mail(mail)
+        self.send_whatsupp()
 
 
     def send_whatsupp(self):
@@ -31,8 +35,14 @@ class SendMessage:
         )
 
     def send_mail(self, email):
+        msg = MIMEMultipart()
+        msg['Subject'] = "Flights!"
+        msg.attach(MIMEText(self.body, 'plain', 'utf-8'))
+
         with smtplib.SMTP("smtp.gmail.com") as connection:
             connection.starttls()
-            connection.login(user="naamaavit@gmail.com", password=my_password)
-            connection.sendmail(from_addr="naamaavit@gmail.com", to_addrs=email,
-                                msg=f"subject:Flights!\n\n{self.body}")
+            connection.login(user=my_email, password=my_password)
+            connection.sendmail(from_addr=my_email, to_addrs=my_email, msg=msg.as_string())
+
+
+

@@ -10,12 +10,6 @@ befor_week_year = befor_week.year
 befor_week_day = befor_week.day
 
 
-
-
-
-
-
-
 def get_token() -> str:
     headers = {
         'authority': 'arboxserver.arboxapp.com',
