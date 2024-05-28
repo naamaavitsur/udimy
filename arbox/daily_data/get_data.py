@@ -12,6 +12,8 @@ print(yesterday_format)
 
 account_sid = os.getenv("AC_SI")
 auth_token = os.getenv("AU_TO")
+mail = os.getenv("MAIL")
+arbox_password = os.getenv("PASS")
 
 
 # nano ~/.bashrc
@@ -44,8 +46,8 @@ def get_token() -> str:
     }
 
     json_data = {
-        'email': os.getenv("MAIL"),
-        'password': os.getenv("PASS"),
+        'email': mail,
+        'password': arbox_password,
     }
 
     response = requests.post('https://arboxserver.arboxapp.com/api/v2/login', params=params, headers=headers, json=json_data)
