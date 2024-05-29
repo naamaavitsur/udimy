@@ -6,11 +6,10 @@
 # mkdir - make new dire
 # rm - delete file
 #( rm - rf ) - delete dire- delete everything inside
-
-
 from flask import Flask
-import time
 app = Flask(__name__)
+
+
 
 
 def make_bolt_decorator(func):
