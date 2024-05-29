@@ -15,7 +15,7 @@ headers = {
 }
 
 
-workout_input = input("What exersice you did today?: ")
+workout_input = "i run 7 km"
 
 parameter= {"query": workout_input,
             "weight_kg": "52",
