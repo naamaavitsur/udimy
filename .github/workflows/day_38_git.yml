@@ -7,10 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       naama:
-        type: choice
-        options:
-          - shay
-          - levin
+        type: string
         description: stam
 
 jobs:
