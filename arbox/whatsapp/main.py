@@ -9,8 +9,8 @@ headers = {
 data = {
     "messaging_product": "whatsapp",
     "to": "972547833192",
-    "type": "template",
-    "template": {
+    "type": "templates",
+    "templates": {
         "name": "hello_world",
         "language": {
             "code": "en_US"

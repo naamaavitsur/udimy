@@ -1,14 +1,8 @@
 import requests
 import os
 from datetime import datetime, timedelta
-
-currnt_date = datetime.now()
-currnt_day = currnt_date.day
-current_year = currnt_date.year
-befor_week = currnt_date + timedelta(days=-6)
-befor_week_year = befor_week.year
-befor_week_day = befor_week.day
-
+import calendar
+from get_dates import formated_last_day_of_month, formated_first_day_of_month, last_day_dats_with_letters, last_seven_day_dats_with_letters
 
 def get_token() -> str:
     headers = {
@@ -119,8 +113,8 @@ def get_cancelation(token):
     }
 
     json_data = {
-        'fromDate': '2024-04-01',
-        'toDate': '2024-04-30',
+        'fromDate': formated_first_day_of_month,
+        'toDate': formated_last_day_of_month,
         'locationId': None,
         'searchBy': 'cancelledDate',
     }
@@ -139,11 +133,6 @@ def get_cancelation(token):
 
 
 def cancellation_fee(token):
-    today_date = datetime.now().strftime("%Y-%m-01")
-    this_month = (datetime.now().month)
-    previos_month = str(this_month - 1)
-    this_month_str = str(this_month)
-    start_month = today_date.replace(this_month_str, previos_month)
     headers = {
         'authority': 'arboxserver.arboxapp.com',
         'accept': 'application/json, text/plain, */*',
@@ -170,8 +159,8 @@ def cancellation_fee(token):
     json_data = {
         'action': None,
         'created_by_user': None,
-        'from_date': start_month,
-        'to_date': today_date,
+        'from_date': formated_first_day_of_month,
+        'to_date': formated_last_day_of_month,
         'location_box_id': None,
         'report_type': 'detailedReport',
         'sub_action': None,
@@ -191,13 +180,6 @@ def cancellation_fee(token):
 
 
 def get_schedule_data(token):
-    three_letter_current_weekday = currnt_date.strftime("%a")
-    three_letter_befor_week_weekday = befor_week.strftime("%a")
-    three_letter_current_month = currnt_date.strftime("%b")
-    three_letter_befor_week_month = befor_week.strftime("%b")
-    from_date = f"{three_letter_befor_week_weekday} {three_letter_befor_week_month} {befor_week_day} {befor_week_year}"
-    to_date = f"{three_letter_current_weekday} {three_letter_current_month} {currnt_day} {current_year}"
-    print(to_date, from_date)
     headers = {
         'authority': 'arboxserver.arboxapp.com',
         'accept': 'application/json, text/plain, */*',
@@ -222,8 +204,8 @@ def get_schedule_data(token):
     }
 
     json_data = {
-        'to': f'{to_date} 00:00:00 GMT+0300',
-        'from': f'{from_date} 00:00:00 GMT+0300',
+        'to': f'{last_day_dats_with_letters} 00:00:00 GMT+0300',
+        'from': f'{last_seven_day_dats_with_letters} 00:00:00 GMT+0300',
         'locations_box_id': 1159,
         'coachId': None,
         'hasSpace': False,
