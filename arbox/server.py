@@ -1,11 +1,9 @@
 import os
 
 from flask import Flask, render_template, redirect, url_for
-import sys
-sys.path.append("../")
 import google_sheet.insert_data as insert_data
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='flask_server/templates', static_folder='flask_server/static')
 
 
 @app.route('/generate-statistic')
