@@ -1,6 +1,9 @@
-from flask import Flask, render_template, redirect, url_for
-import google_sheet.insert_data as insert_data
+import os
 
+from flask import Flask, render_template, redirect, url_for
+import sys
+sys.path.append("../")
+import google_sheet.insert_data as insert_data
 
 app = Flask(__name__)
 
