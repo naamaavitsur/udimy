@@ -2,8 +2,8 @@ import os
 import gspread
 import json
 from google.oauth2.service_account import Credentials
-from arbox.monthly_statistic.get_dates import previous_month, last_month_year
-from arbox.monthly_statistic.sum_monthly_data import list_of_sum_data, list_of_class_data
+from monthly_statistic.get_dates import previous_month, last_month_year
+from monthly_statistic.sum_monthly_data import list_of_sum_data, list_of_class_data
 print("I have all the data from arbox!")
 from datetime import datetime
 
