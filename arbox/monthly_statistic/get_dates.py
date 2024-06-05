@@ -35,3 +35,11 @@ last_day_datetime_formate = datetime(year=last_month_year, month=int(previous_mo
 seven_days_before_last_day_datetime_formate = last_day_datetime_formate + timedelta(-7)
 last_day_dats_with_letters = last_day_datetime_formate.strftime("%a %b %d %Y")
 last_seven_day_dats_with_letters = seven_days_before_last_day_datetime_formate.strftime("%a %b %d %Y")
+
+# print(f"to:{last_day_dats_with_letters} 00:00:00 GMT+0300\n"
+#       f"from:{last_seven_day_dats_with_letters} 00:00:00 GMT+0300")
+#
+# 'to': 'Sun Jun 09 2024 00:00:00 GMT+0300',
+# 'from': 'Sun Jun 02 2024 00:00:00 GMT+0300',
+# ("to: Thu May 30 2024 00:00:00 GMT+0300"
+#  "from:Thu May 23 2024 00:00:00 GMT+0300")

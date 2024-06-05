@@ -2,7 +2,7 @@ import requests
 import os
 from datetime import datetime, timedelta
 import calendar
-from get_dates import formated_last_day_of_month, formated_first_day_of_month, last_day_dats_with_letters, last_seven_day_dats_with_letters
+from arbox.monthly_statistic.get_dates import formated_last_day_of_month, formated_first_day_of_month, last_day_dats_with_letters, last_seven_day_dats_with_letters, last_day_datetime_formate
 
 def get_token() -> str:
     headers = {
@@ -180,6 +180,7 @@ def cancellation_fee(token):
 
 
 def get_schedule_data(token):
+    # TODO - CHECK WHAT HAPPEND WITH THE DATES
     headers = {
         'authority': 'arboxserver.arboxapp.com',
         'accept': 'application/json, text/plain, */*',
@@ -226,6 +227,7 @@ def get_schedule_data(token):
     all_max_user = 0
     number_of_under_50_percent = 0
     working_class = 0
+    number_of_class = 0
 
     for i in response:
         name = i["box_categories"]["name"]
@@ -242,11 +244,15 @@ def get_schedule_data(token):
                 kids_registering += registered
                 empty_place = max_users - registered
                 all_empty_place += empty_place
+                number_of_class += 1
+                print(name)
         else:
             working_class += registered
-
+            number_of_class +=1
+            print(f"only class with 0 participent and בוגרים. register: {registered}")
+    print(number_of_class)
     occupancy_percentage = all_registering / all_max_user
-    list_of_class_data = [datetime.now().strftime("%Y-%m"), working_class, registering_adult_classes,kids_registering, all_empty_place,all_max_user, round(occupancy_percentage, 2), number_of_under_50_percent]
+    list_of_class_data = [last_day_datetime_formate.strftime("%Y-%m"), working_class, registering_adult_classes,kids_registering, all_empty_place,all_max_user, round(occupancy_percentage, 2), number_of_under_50_percent]
     return list_of_class_data
 
 
