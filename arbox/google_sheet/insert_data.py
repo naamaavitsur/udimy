@@ -43,6 +43,7 @@ def read_amount_of_injury_reports(sheet):
             val_datetime = datetime.strptime(val, '%Y-%m-%d %H:%M:%S')
             month = val_datetime.month
             year = val_datetime.year
+            # previous_month = get_previous_month()
             if month == previous_month[-1] and year == last_month_year:
                 injury_counter += 1
     list_of_sum_data.append(injury_counter)

@@ -1,6 +1,6 @@
 from arbox.monthly_statistic.get_arbox_data import get_token, get_active_user, count_member_type, get_cancelation, cancellation_fee, get_schedule_data
 from datetime import datetime
-from arbox.monthly_statistic.get_dates import last_day_datetime_formate
+from monthly_statistic.get_dates import last_day_datetime_formate
 
 
 

@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 import calendar
 
 
-
 def get_previous_month_date(date):
     if date.month == 1:
         previous_month_date = datetime(date.year - 1, 12, 1)
@@ -18,6 +17,10 @@ def find_last_month_year(current_year, previous_month):
     else:
         last_month_year = current_year
         return last_month_year
+
+def get_previous_month():
+
+    pass
 
 
 today = datetime.now()
