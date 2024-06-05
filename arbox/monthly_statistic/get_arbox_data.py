@@ -2,7 +2,7 @@ import requests
 import os
 from datetime import datetime, timedelta
 import calendar
-from arbox.monthly_statistic.get_dates import formated_last_day_of_month, formated_first_day_of_month, last_day_dats_with_letters, last_seven_day_dats_with_letters, last_day_datetime_formate
+from monthly_statistic.get_dates import formated_last_day_of_month, formated_first_day_of_month, last_day_dats_with_letters, last_seven_day_dats_with_letters, last_day_datetime_formate
 
 def get_token() -> str:
     headers = {

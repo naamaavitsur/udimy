@@ -2,13 +2,12 @@ import os
 import gspread
 import json
 from google.oauth2.service_account import Credentials
-from monthly_statistic.get_dates import previous_month, last_month_year
-from monthly_statistic.sum_monthly_data import list_of_sum_data, list_of_class_data
-print("I have all the data from arbox!")
+from monthly_statistic.get_dates import get_previous_month_date
+from monthly_statistic.sum_monthly_data import create_stats_data_to_insert, list_of_class_data
 from datetime import datetime
 
-
 creds_file_name = "creds.json"
+
 
 def insert_data_to_class(sheet):
     work_sheet = sheet.worksheet('דוח חוגים')
@@ -26,34 +25,41 @@ def insert_data_to_statistic(sheet):
     print("I have the sheet you want to insert")
     column = get_column_to_insert(work_sheet)
     row = 1
-    for i in list_of_sum_data:
+    list_of_stats_data = create_stats_data_to_insert()
+    for i in list_of_stats_data:
         work_sheet.update_cell(row=row, col=column, value=i)
         row += 1
-    print("i did it!!")
+    print(f"i did it!! i insert {row} rows")
 
 
-def read_amount_of_injury_reports(sheet):
+def read_amount_of_injury_reports(sheet, start_date, end_date):
     injury_counter = 0
     work_sheet = sheet.worksheet('פצועים פצועות')
-    for i in range(1,100000):
-        val = work_sheet.cell(i, 1).value
-        if val == None:
-            break
-        else:
-            val_datetime = datetime.strptime(val, '%Y-%m-%d %H:%M:%S')
-            month = val_datetime.month
-            year = val_datetime.year
-            # previous_month = get_previous_month()
-            if month == previous_month[-1] and year == last_month_year:
-                injury_counter += 1
-    list_of_sum_data.append(injury_counter)
+    row_num = 1
+    cell_val = work_sheet.cell(row_num, 1).value
+    print(f"cell_val: {cell_val}, {row_num}")
+    while cell_val:
+        cell_val = work_sheet.cell(row_num, 1).value
+        print(f"cell_val: {cell_val}, {row_num}")
+        row_num += 1
+        try:
+            val_datetime = datetime.strptime(cell_val, '%Y-%m-%d %H:%M:%S')
+        except Exception as e:
+            print(f"ERROR- cell val: {cell_val} in row num: {row_num} failed to convert to datetime, skip")
+            print(f"ERROR- {e}")
+            continue
+        if start_date <= val_datetime <= end_date:
+            injury_counter += 1
+    return injury_counter
 
 
 def get_column_to_insert(work_sheet):
-    for number in range(1, 10000000000):
-        val = work_sheet.cell(row=1, col=number).value
-        if val == None:
-            return number
+    col_num = 1
+    cell_val = work_sheet.cell(row=1, col=col_num).value
+    while cell_val:
+        col_num += 1
+        cell_val = work_sheet.cell(row=1, col=col_num).value
+    return col_num
 
 
 def create_creds_json():
@@ -85,10 +91,10 @@ def sheet_connection():
     return sheet
 
 
-def main():
+def main(start_date, end_date):
     create_creds_json()
     sheet = sheet_connection()
-    read_amount_of_injury_reports(sheet)
+    injury_count = read_amount_of_injury_reports(sheet, start_date=start_date, end_date=end_date)
     insert_data_to_statistic(sheet)
     insert_data_to_class(sheet)
 
@@ -99,9 +105,3 @@ if __name__ == '__main__':
     read_amount_of_injury_reports(sheet)
     insert_data_to_statistic(sheet)
     insert_data_to_class(sheet)
-
-
-
-
-
-
