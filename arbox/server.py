@@ -8,10 +8,8 @@ app = Flask(__name__, template_folder='flask_server/templates', static_folder='f
 
 @app.route('/generate-statistic')
 def generate_statistic():
-    # Call your function here
     start_date, end_date = get_default_start_end_dates()
     insert_data.main(start_date,end_date)
-    print("Generating monthly statistic...")
     return render_template("done_page.html")
 
 
@@ -20,6 +18,4 @@ def home():
     return render_template("monthly_statistic.html")
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    start_date, end_date = get_default_start_end_dates()
-    insert_data.main(start_date,end_date)
+    app.run(host='0.0.0.0', debug=True)
