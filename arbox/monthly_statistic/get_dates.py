@@ -3,7 +3,8 @@ import calendar
 import config
 
 
-def get_previous_month_date(date) -> int:
+def get_previous_month_date() -> int:
+    date = datetime.now()
     if date.month == 1:
         previous_month_date = 12
     else:
@@ -18,10 +19,10 @@ def find_last_month_year(current_year, previous_month):
     return current_year
 
 
-def get_default_end_dates():
+def get_default_start_end_dates():
     now = datetime.now()
     current_year = now.year
-    previous_month = get_previous_month_date(now)
+    previous_month = get_previous_month_date()
     last_month_year = find_last_month_year(current_year, previous_month)
     last_day_of_month = calendar.monthrange(last_month_year, previous_month)[1]  # number of days in the month
     return (datetime(last_month_year, previous_month, 1),
@@ -29,17 +30,24 @@ def get_default_end_dates():
 
 
 def get_start_and_end_for_last_week_of_last_month():
-    last_day_of_month = get_default_end_dates()[1]
+    last_day_of_month = get_default_start_end_dates()[1]
     week_before_end_day = last_day_of_month - timedelta(days=7)
     return week_before_end_day, last_day_of_month
 
 
+def make_date_formated(date, format) -> str:
+    date_str = date.strftime(format)
+    return date_str
 
-formated_last_day_of_month= f"{last_month_year}-{previous_month}-{last_day_of_month}"
-formated_last_seven_day_of_month =f"{last_month_year}-{previous_month}-{seven_days_before_last_day}"
-formated_first_day_of_month = f"{last_month_year}-{previous_month}-01"
-last_day_dats_with_letters = last_day_datetime_formate.strftime("%a %b %d %Y")
-last_seven_day_dats_with_letters = seven_days_before_last_day_datetime_formate.strftime("%a %b %d %Y")
+
+
+
+#
+# formated_last_day_of_month= f"{last_month_year}-{previous_month}-{last_day_of_month}"
+# formated_last_seven_day_of_month =f"{last_month_year}-{previous_month}-{seven_days_before_last_day}"
+# formated_first_day_of_month = f"{last_month_year}-{previous_month}-01"
+# last_day_dats_with_letters = last_day_datetime_formate.strftime("%a %b %d %Y")
+# last_seven_day_dats_with_letters = seven_days_before_last_day_datetime_formate.strftime("%a %b %d %Y")
 
 
 
@@ -53,5 +61,5 @@ last_seven_day_dats_with_letters = seven_days_before_last_day_datetime_formate.s
 
 
 if __name__ == '__main__':
-    print(get_default_end_dates())
+    print(get_default_start_end_dates())
     print(get_start_and_end_for_last_week_of_last_month())

@@ -2,14 +2,17 @@ import os
 import gspread
 import json
 from google.oauth2.service_account import Credentials
-from monthly_statistic.get_dates import get_previous_month_date
-from monthly_statistic.sum_monthly_data import create_stats_data_to_insert, list_of_class_data
+from monthly_statistic.get_arbox_data import get_token
+from monthly_statistic.get_dates import get_previous_month_date, get_default_start_end_dates
+from monthly_statistic.sum_monthly_data import create_stats_data_to_insert, create_class_data
 from datetime import datetime
+
 
 creds_file_name = "creds.json"
 
 
-def insert_data_to_class(sheet):
+def insert_data_to_class(sheet, token):
+    list_of_class_data = create_class_data(token)
     work_sheet = sheet.worksheet('דוח חוגים')
     print("I have the חוגים sheet you want to insert")
     column = get_column_to_insert(work_sheet)
@@ -20,12 +23,12 @@ def insert_data_to_class(sheet):
         row += 1
 
 
-def insert_data_to_statistic(sheet):
+def insert_data_to_statistic(sheet, token):
     work_sheet = sheet.worksheet('naama')
     print("I have the sheet you want to insert")
     column = get_column_to_insert(work_sheet)
     row = 1
-    list_of_stats_data = create_stats_data_to_insert()
+    list_of_stats_data = create_stats_data_to_insert(token=token)
     for i in list_of_stats_data:
         work_sheet.update_cell(row=row, col=column, value=i)
         row += 1
@@ -37,10 +40,10 @@ def read_amount_of_injury_reports(sheet, start_date, end_date):
     work_sheet = sheet.worksheet('פצועים פצועות')
     row_num = 1
     cell_val = work_sheet.cell(row_num, 1).value
-    print(f"cell_val: {cell_val}, {row_num}")
+    # print(f"cell_val: {cell_val}, {row_num}")
     while cell_val:
         cell_val = work_sheet.cell(row_num, 1).value
-        print(f"cell_val: {cell_val}, {row_num}")
+        # print(f"cell_val: {cell_val}, {row_num}")
         row_num += 1
         try:
             val_datetime = datetime.strptime(cell_val, '%Y-%m-%d %H:%M:%S')
@@ -92,16 +95,15 @@ def sheet_connection():
 
 
 def main(start_date, end_date):
+    token = get_token()
     create_creds_json()
     sheet = sheet_connection()
     injury_count = read_amount_of_injury_reports(sheet, start_date=start_date, end_date=end_date)
-    insert_data_to_statistic(sheet)
-    insert_data_to_class(sheet)
+    print(injury_count)
+    insert_data_to_statistic(sheet, token)
+    insert_data_to_class(sheet, token)
 
 
 if __name__ == '__main__':
-    create_creds_json()
-    sheet = sheet_connection()
-    read_amount_of_injury_reports(sheet)
-    insert_data_to_statistic(sheet)
-    insert_data_to_class(sheet)
+    start_date, end_date = get_default_start_end_dates()
+    main(start_date, end_date)
