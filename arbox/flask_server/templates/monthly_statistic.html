@@ -8,6 +8,15 @@
 <body bgcolor="yellow">
 <img src="static/image.jpg">
 <h1>Hey Maayan!</h1>
+<form action="/action_page.php">
+  <label> From: </label>
+  <input type="date" id="from"  value={{from_date}}>
+</form>
+<form action="/action_page.php">
+  <label>To:    </label>
+  <input type="date" id="to" value={{to_date}}>
+</form>
+
 <h2>Press the button to generate monthly ststistic</h2>
 <button onclick="location.href='{{ url_for('generate_statistic') }}'">Generate monthly statistic</button>
 <h2>נשיקות</h2>
