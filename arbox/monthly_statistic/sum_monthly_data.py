@@ -3,9 +3,8 @@ from monthly_statistic.get_dates import make_date_formated, get_previous_month_d
 import config
 
 
-def create_stats_data_to_insert(token):
-    previous_month_begining, previous_month_end = get_default_start_end_dates()
-    date = make_date_formated(previous_month_begining, config.sheet_format)
+def create_stats_data_to_insert(token, start_date, end_date):
+    date = make_date_formated(start_date, config.sheet_format)
     active_member = get_active_user(token=token)
     renewable_monthly = count_member_type(active_member=active_member, member_type="מנוי חודשי מתחדש")
     renewable_monthly_old = count_member_type(active_member, member_type="מנוי חודשי מתחדש הוק- ישן")
@@ -16,8 +15,8 @@ def create_stats_data_to_insert(token):
     monthly_only = count_member_type(active_member, "מנוי חודש בודד")
     monthly_only_sol_stu = count_member_type(active_member,"מנוי חודש בודד- חיילים/סטודנטים")
     all_monythly_only = monthly_only + monthly_only_sol_stu
-    monthly_cancelation = get_cancelation(token, previous_month_begining, previous_month_end)
-    number_of_cancellation_fee = cancellation_fee(token, previous_month_begining, previous_month_end)
+    monthly_cancelation = get_cancelation(token, start_date, end_date)
+    number_of_cancellation_fee = cancellation_fee(token, start_date, end_date)
     list_of_sum_data = [date, all_monythly_only, all_renewable, all_renewable+all_monythly_only, monthly_cancelation, number_of_cancellation_fee]
     return list_of_sum_data
 

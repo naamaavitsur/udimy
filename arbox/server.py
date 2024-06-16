@@ -3,7 +3,8 @@ from flask import Flask, render_template, redirect, url_for, request
 import google_sheet.insert_data as insert_data
 from monthly_statistic.get_dates import get_default_start_end_dates
 from datetime import datetime
-
+from dotenv import load_dotenv, dotenv_values
+load_dotenv()
 
 app = Flask(__name__, template_folder='flask_server/templates', static_folder='flask_server/static')
 
@@ -27,3 +28,4 @@ def home():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
+

@@ -6,6 +6,8 @@ from monthly_statistic.get_arbox_data import get_token
 from monthly_statistic.get_dates import get_previous_month_date, get_default_start_end_dates
 from monthly_statistic.sum_monthly_data import create_stats_data_to_insert, create_class_data
 from datetime import datetime
+from dotenv import load_dotenv, dotenv_values
+load_dotenv()
 
 
 creds_file_name = "creds.json"
@@ -23,12 +25,12 @@ def insert_data_to_class(sheet, token):
         row += 1
 
 
-def insert_data_to_statistic(sheet, token):
+def insert_data_to_statistic(sheet, token, start_date, end_date):
     work_sheet = sheet.worksheet('naama')
     print("I have the sheet you want to insert")
     column = get_column_to_insert(work_sheet)
     row = 1
-    list_of_stats_data = create_stats_data_to_insert(token=token)
+    list_of_stats_data = create_stats_data_to_insert(token, start_date, end_date)
     for i in list_of_stats_data:
         work_sheet.update_cell(row=row, col=column, value=i)
         row += 1
@@ -66,6 +68,7 @@ def get_column_to_insert(work_sheet):
 
 
 def create_creds_json():
+    print(os.getenv('SHEET_PRIVATE_KEY_ID'))
     creds_data = {
         "type": "service_account",
         "project_id": "shay-naama",
@@ -100,7 +103,7 @@ def main(start_date, end_date):
     sheet = sheet_connection()
     injury_count = read_amount_of_injury_reports(sheet, start_date=start_date, end_date=end_date)
     print(injury_count)
-    insert_data_to_statistic(sheet, token)
+    insert_data_to_statistic(sheet, token, start_date, end_date)
     insert_data_to_class(sheet, token)
 
 
