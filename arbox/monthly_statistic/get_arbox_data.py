@@ -189,8 +189,8 @@ def cancellation_fee(token, previous_month_begining, previous_month_end):
     return number_of_cancellation_fee
 
 
-def get_last_week_response(token):
-    start_week, end_week = get_start_and_end_for_last_week_of_last_month()
+def get_last_week_response(token, end_date):
+    start_week, end_week = get_start_and_end_for_last_week_of_last_month(end_date)
     start_week_format = make_date_formated(start_week, three_letter_format)
     end_week_format = make_date_formated(end_week, three_letter_format)
 
@@ -236,8 +236,8 @@ def get_last_week_response(token):
     return response
 
 
-def get_last_week_data(token):
-    response = get_last_week_response(token)
+def get_last_week_data(token, end_date):
+    response = get_last_week_response(token, end_date)
     registering_adult_classes = 0
     kids_registering = 0
     all_registering = 0    # all the class participent accept special
@@ -267,7 +267,7 @@ def get_last_week_data(token):
 
     occupancy_percentage = all_registering / all_max_user
     previous_month_begining = get_default_start_end_dates()[0]
-    date = make_date_formated(previous_month_begining, sheet_format)
+    date = make_date_formated(end_date, sheet_format)
     list_of_class_data = [date, working_class, registering_adult_classes,kids_registering, all_empty_place,all_max_user, round(occupancy_percentage, 2), number_of_class_under_50_percent]
     return list_of_class_data
 

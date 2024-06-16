@@ -21,8 +21,8 @@ def create_stats_data_to_insert(token, start_date, end_date):
     return list_of_sum_data
 
 
-def create_class_data(token):
-    list_of_class_data = get_last_week_data(token)
+def create_class_data(token, start_data, end_data):
+    list_of_class_data = get_last_week_data(token, end_data)
     return list_of_class_data
 
 if __name__ == '__main__':

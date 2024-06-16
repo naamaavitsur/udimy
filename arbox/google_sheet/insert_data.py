@@ -13,12 +13,11 @@ load_dotenv()
 creds_file_name = "creds.json"
 
 
-def insert_data_to_class(sheet, token):
-    list_of_class_data = create_class_data(token)
+def insert_data_to_class(sheet, token, start_data, end_data):
+    list_of_class_data = create_class_data(token, start_data, end_data)
     work_sheet = sheet.worksheet('דוח חוגים')
     print("I have the חוגים sheet you want to insert")
     column = get_column_to_insert(work_sheet)
-    month = datetime.now().month
     row = 1
     for i in list_of_class_data:
         work_sheet.update_cell(row=row, col=column, value=i)
@@ -68,7 +67,6 @@ def get_column_to_insert(work_sheet):
 
 
 def create_creds_json():
-    print(os.getenv('SHEET_PRIVATE_KEY_ID'))
     creds_data = {
         "type": "service_account",
         "project_id": "shay-naama",
@@ -102,9 +100,8 @@ def main(start_date, end_date):
     create_creds_json()
     sheet = sheet_connection()
     injury_count = read_amount_of_injury_reports(sheet, start_date=start_date, end_date=end_date)
-    print(injury_count)
     insert_data_to_statistic(sheet, token, start_date, end_date)
-    insert_data_to_class(sheet, token)
+    insert_data_to_class(sheet, token, start_date, end_date)
 
 
 if __name__ == '__main__':

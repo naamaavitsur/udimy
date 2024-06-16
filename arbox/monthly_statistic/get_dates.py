@@ -29,10 +29,9 @@ def get_default_start_end_dates():
             datetime(last_month_year, previous_month, last_day_of_month))
 
 
-def get_start_and_end_for_last_week_of_last_month():
-    last_day_of_month = get_default_start_end_dates()[1]
-    week_before_end_day = last_day_of_month - timedelta(days=7)
-    return week_before_end_day, last_day_of_month
+def get_start_and_end_for_last_week_of_last_month(end_date):
+    week_before_end_day = end_date - timedelta(days=7)
+    return week_before_end_day, end_date
 
 
 def make_date_formated(date, format) -> str:
