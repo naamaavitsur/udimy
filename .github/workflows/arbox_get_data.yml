@@ -3,7 +3,7 @@ name: arbox_get_data
 
 on:
   schedule:
-    - cron: "0 23 * * *"
+    - cron: "0 7 * * *"
   workflow_dispatch:
 
 permissions:
@@ -11,9 +11,7 @@ permissions:
 
 jobs:
   get_data:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.11
@@ -37,7 +35,12 @@ jobs:
         AU_TO: ${{ secrets.AU_TO }}
         MAIL: ${{ secrets.MAIL }}
         PASS: ${{ secrets.PASS }}
+        FACBOOK_TOKEN_PERMENENT: ${{secrets.FACBOOK_TOKEN_PERMENENT}}
+        JF_API: ${{ secrets.JF_API }}
+
+
+
       run: |
         cd arbox/daily_data
-        python get_data.py
+        python3 get_data.py
         
