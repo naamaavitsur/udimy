@@ -7,20 +7,18 @@ token_forever = os.getenv("FACEBOOK_FOREVER")
 
 import requests
 import json
-#
-# message = "היי!"
-#
+
 
 def send_template():
     url = 'https://graph.facebook.com/v20.0/317183528149149/messages'
     headers = {
-        'Authorization': f'Bearer {token}',
+        'Authorization': f'Bearer {token_forever}',
         'Content-Type': 'application/json'
     }
 
     data = {
         "messaging_product": "whatsapp",
-        "to": "+972502239911",
+        "to": "+972547833192",
         "type": "template",
         "template": {
             "name": "new",

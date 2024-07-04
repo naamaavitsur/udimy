@@ -21,7 +21,54 @@ whatsapp_token_permenent = os.getenv("FACBOOK_TOKEN_PERMENENT")
 
 today = datetime.now()
 today_format = today.strftime("%Y-%m-%-d")
-yesterday_format = (today + timedelta(days=-1)).strftime("%Y-%m-%-d")
+yesterday = today - timedelta(days=1)
+yesterday_month = yesterday.month
+yesterday_year = yesterday.year
+yesterday_format = yesterday.strftime("%Y-%m-%-d")
+message_date_formate =  yesterday.strftime("%d.%m.%.Y")
+
+
+
+
+
+
+def get_total_profit(token):
+    headers = {
+        'authority': 'api.arboxapp.com',
+        'accept': 'application/json, text/plain, */*',
+        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
+        'accesstoken': token,
+        'boxfk': '845',
+        'content-type': 'application/json;charset=UTF-8',
+        'origin': 'https://angularmanage.arboxapp.com',
+        'referer': 'https://angularmanage.arboxapp.com/',
+        'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Linux"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-site',
+        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+    }
+    json_data = {
+        'init': True,
+        'income_type_payment': 3,
+        'submitting': True,
+        'location_box': None,
+        'selected_year': yesterday_year,
+        'selected_month': str(yesterday_month),
+        'radio_selection': 'betweenDates',
+        'selectedTabb': 4,
+        'from_date': yesterday_format,
+        'to_date': yesterday_format,
+
+    }
+
+    response = requests.post('https://api.arboxapp.com/index.php/api/v1/finance/getInfoByDates/', headers=headers, json=json_data)
+    response = response.json()
+    total_amount = response["total_amount"]
+    without_maam = total_amount / 1.17
+    return int(without_maam)
 
 
 def get_token() -> str:
@@ -135,12 +182,6 @@ def get_number_of_injuries():
 #         messege += f"  *{i} ({all_selling_items[i]})\n"
 #         return messege
 
-
-def get_selling_profit(list_of_selling_items):
-    money_paid = 0
-    for item in list_of_selling_items:
-        money_paid += item["paid"]
-    return money_paid
 
 
 def entrence():
@@ -303,7 +344,7 @@ def get_new_client(token):
     return count_new_client
 
 
-def send_whatsapp(message, people):
+def send_whatsapp(people):
     url = 'https://graph.facebook.com/v20.0/317183528149149/messages'
     headers = {
         'Content-Type': 'application/json',
@@ -312,12 +353,28 @@ def send_whatsapp(message, people):
 
     data = {
         "messaging_product": "whatsapp",
-        "recipient_type": "individual",
         "to": people,
-        "type": "text",
-        "text": {
-            "preview_url": True,
-            "body": message
+        "type": "template",
+        "template": {
+            "name": "daily_message",
+            "language": {
+                "code": "en_US"
+            },
+            "components": [
+                {
+                    "type": "body",
+                    "parameters": [
+                        {"type": "text", "text": monthly_members_count},
+                        {"type": "text", "text": money_paid},
+                        {"type": "text", "text": introduction_card},
+                        {"type": "text", "text": basics_workshop},
+                        {"type": "text", "text": class_kids},
+                        {"type": "text", "text": new_client},
+                        {"type": "text", "text": number_of_injuries},
+                        {"type": "text", "text": message_date_formate}
+                    ]
+                }
+            ]
         }
     }
 
@@ -332,26 +389,30 @@ def send_whatsapp(message, people):
 
 
 token = get_token()
+
 active_members = get_all_active_user(token)
 monthly_members_count = count_member_type(active_members, config.all_renewable)
 list_of_selling_items = get_selling_items()
-money_paid = get_selling_profit(list_of_selling_items)
+money_paid = get_total_profit(token)
 introduction_card = get_amount_of_spesific_item("כרטיסיית הכרות + צ'יפ", list_of_selling_items)
 basics_workshop = get_amount_of_spesific_item("סדנת יסודות", list_of_selling_items)
 class_kids = number_of_child_in_class(active_members)
 new_client = get_new_client(token)
 number_of_injuries = get_number_of_injuries()
-message = (f"עדכון יומי:🦧\n"
-           f"{yesterday_format}\n"
-           f"מספר מנויים: {monthly_members_count}\n"
-           f"סהכ מכירות אתמול : {money_paid}\n"
-           f"מכירות כרטיסיית היכרות: {introduction_card}\n"
-           f"מכירות סדנת יסודות: {basics_workshop}\n"
-           f"ילדי חוגים: {class_kids}\n"
-           f"לקוחות חדשים: {new_client}\n"
-           f"דיווחי פציעה: {number_of_injuries}\n")
+# message = (f"עדכון יומי:🦧\n"
+#            f"{yesterday_format}\n"
+#            f"מספר מנויים: {monthly_members_count}\n"
+#            f"סהכ מכירות אתמול : {money_paid}\n"
+#            f"מכירות כרטיסיית היכרות: {introduction_card}\n"
+#            f"מכירות סדנת יסודות: {basics_workshop}\n"
+#            f"ילדי חוגים: {class_kids}\n"
+#            f"לקוחות חדשים: {new_client}\n"
+#            f"דיווחי פציעה: {number_of_injuries}\n")
+
+
+
 for people in send_message_to.values():
-    send_whatsapp(message, people)
+    send_whatsapp(people)
 
 
 
