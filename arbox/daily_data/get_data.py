@@ -67,8 +67,7 @@ def get_total_profit(token):
     response = requests.post('https://api.arboxapp.com/index.php/api/v1/finance/getInfoByDates/', headers=headers, json=json_data)
     response = response.json()
     total_amount = response["total_amount"]
-    without_maam = total_amount / 1.17
-    return int(without_maam)
+    return total_amount
 
 
 def get_token() -> str:
