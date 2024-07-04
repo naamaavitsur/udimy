@@ -25,7 +25,7 @@ yesterday = today - timedelta(days=1)
 yesterday_month = yesterday.month
 yesterday_year = yesterday.year
 yesterday_format = yesterday.strftime("%Y-%m-%-d")
-message_date_formate =  yesterday.strftime("%d.%m.%.Y")
+message_date_formate =  yesterday.strftime("%d.%m.%Y")
 
 
 
