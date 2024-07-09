@@ -6,8 +6,7 @@ import os
 import config
 import json
 
-send_message_to = {
-    "ilai": "+972527808418", "oren":"+972502239911",
+send_message_to = {"ilai": "+972527808418", "oren":"+972502239911",
 "shahar":"+972522492230", "naama": "+972547833192"}
 
 
@@ -22,11 +21,11 @@ arbox_password = os.getenv("PASS")
 whatsapp_token_permenent = os.getenv("FACBOOK_TOKEN_PERMENENT")
 
 today = datetime.now()
-today_format = today.strftime("%Y-%m-%-d")
+today_format = today.strftime("%Y-%m-%d")
 yesterday = today - timedelta(days=1)
 yesterday_month = yesterday.month
 yesterday_year = yesterday.year
-yesterday_format = yesterday.strftime("%Y-%m-%-d")
+yesterday_format = yesterday.strftime("%Y-%m-%d")
 message_date_formate =  yesterday.strftime("%d.%m.%Y")
 
 
@@ -114,7 +113,7 @@ def get_token() -> str:
     return token
 
 
-def get_selling_items():
+def get_selling_items(token):
     try:
         headers = {
             'authority': 'arboxserver.arboxapp.com',
@@ -175,7 +174,7 @@ def get_number_of_injuries():
                 count += 1
     except:
         logging.error("Cant get number of injuries")
-        count = None
+        count = "המידע לא זמין"
     return count
 
 
@@ -198,7 +197,7 @@ def get_number_of_injuries():
 
 
 
-def entrence():
+def entrence(token):
     headers = {
         'authority': 'arboxserver.arboxapp.com',
         'accept': 'application/json, text/plain, */*',
@@ -285,9 +284,6 @@ def get_all_active_user(token):
         return None
 
 
-
-
-
 def count_member_type(active_member:dict, membership_type:list) -> int:
     try:
         membership_count = 0
@@ -296,7 +292,7 @@ def count_member_type(active_member:dict, membership_type:list) -> int:
                 membership_count += 1
     except:
         logging.error("Cant count member type")
-        membership_count= None
+        membership_count = "המידע לא זמין"
     return membership_count
 
 
@@ -307,7 +303,7 @@ def get_amount_of_spesific_item(wanted_item, selling_list):
             if item["membership_type_name"] == wanted_item:
                 count += 1
     except:
-        count = 0
+        count = "המידע לא זמין"
         logging.error(f"Cant get amount of: {wanted_item}")
     return count
 
@@ -379,7 +375,7 @@ def get_new_client(token):
     return count_new_client
 
 
-def send_whatsapp(people):
+def send_whatsapp(people ,monthly_members_count, money_paid, introduction_card,basics_workshop, class_kids, new_client, number_of_injuries ):
     url = 'https://graph.facebook.com/v20.0/317183528149149/messages'
     headers = {
         'Content-Type': 'application/json',
@@ -417,21 +413,22 @@ def send_whatsapp(people):
 
     if response.status_code == 200:
         logging.info(f"Success response: {response.json()}")
-
     else:
         logging.error(f"Failed with status code: {response.status_code}")
 
-
-token = get_token()
-active_members = get_all_active_user(token)
-monthly_members_count = count_member_type(active_members, config.all_renewable)
-list_of_selling_items = get_selling_items()
-money_paid = get_total_profit(token)
-introduction_card = get_amount_of_spesific_item("כרטיסיית הכרות + צ'יפ", list_of_selling_items)
-basics_workshop = get_amount_of_spesific_item("סדנת יסודות", list_of_selling_items)
-class_kids = number_of_child_in_class(active_members)
-new_client = get_new_client(token)
-number_of_injuries = get_number_of_injuries()
+def main():
+    token = get_token()
+    active_members = get_all_active_user(token)
+    monthly_members_count = count_member_type(active_members, config.all_renewable)
+    list_of_selling_items = get_selling_items(token)
+    money_paid = get_total_profit(token)
+    introduction_card = get_amount_of_spesific_item("כרטיסיית הכרות + צ'יפ", list_of_selling_items)
+    basics_workshop = get_amount_of_spesific_item("סדנת יסודות", list_of_selling_items)
+    class_kids = number_of_child_in_class(active_members)
+    new_client = get_new_client(token)
+    number_of_injuries = get_number_of_injuries()
+    for people in send_message_to.values():
+        send_whatsapp(people ,monthly_members_count, money_paid, introduction_card,basics_workshop, class_kids, new_client, number_of_injuries)
 # message = (f"עדכון יומי:🦧\n"
 #            f"{yesterday_format}\n"
 #            f"מספר מנויים: {monthly_members_count}\n"
@@ -443,9 +440,9 @@ number_of_injuries = get_number_of_injuries()
 #            f"דיווחי פציעה: {number_of_injuries}\n")
 
 
+if __name__ == '__main__':
+    main()
 
-for people in send_message_to.values():
-    send_whatsapp(people)
 
 
 
