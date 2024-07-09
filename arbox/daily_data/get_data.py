@@ -1,11 +1,13 @@
+import logging
+
 import requests
 from datetime import datetime, timedelta
-from twilio.rest import Client
 import os
 import config
 import json
 
-send_message_to = {"ilai": "+972527808418", "oren":"+972502239911",
+send_message_to = {
+    "ilai": "+972527808418", "oren":"+972502239911",
 "shahar":"+972522492230", "naama": "+972547833192"}
 
 
@@ -28,139 +30,152 @@ yesterday_format = yesterday.strftime("%Y-%m-%-d")
 message_date_formate =  yesterday.strftime("%d.%m.%Y")
 
 
-
-
-
-
 def get_total_profit(token):
-    headers = {
-        'authority': 'api.arboxapp.com',
-        'accept': 'application/json, text/plain, */*',
-        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
-        'accesstoken': token,
-        'boxfk': '845',
-        'content-type': 'application/json;charset=UTF-8',
-        'origin': 'https://angularmanage.arboxapp.com',
-        'referer': 'https://angularmanage.arboxapp.com/',
-        'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Linux"',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-site',
-        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    }
-    json_data = {
-        'init': True,
-        'income_type_payment': 3,
-        'submitting': True,
-        'location_box': None,
-        'selected_year': yesterday_year,
-        'selected_month': str(yesterday_month),
-        'radio_selection': 'betweenDates',
-        'selectedTabb': 4,
-        'from_date': yesterday_format,
-        'to_date': yesterday_format,
+    try:
+        headers = {
+            'authority': 'api.arboxapp.com',
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
+            'accesstoken': token,
+            'boxfk': '845',
+            'content-type': 'application/json;charset=UTF-8',
+            'origin': 'https://angularmanage.arboxapp.com',
+            'referer': 'https://angularmanage.arboxapp.com/',
+            'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Linux"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        }
+        json_data = {
+            'init': True,
+            'income_type_payment': 3,
+            'submitting': True,
+            'location_box': None,
+            'selected_year': yesterday_year,
+            'selected_month': str(yesterday_month),
+            'radio_selection': 'betweenDates',
+            'selectedTabb': 4,
+            'from_date': yesterday_format,
+            'to_date': yesterday_format,
 
-    }
+        }
 
-    response = requests.post('https://api.arboxapp.com/index.php/api/v1/finance/getInfoByDates/', headers=headers, json=json_data)
-    response = response.json()
-    total_amount = response["total_amount"]
+        response = requests.post('https://api.arboxapp.com/index.php/api/v1/finance/getInfoByDates/', headers=headers, json=json_data)
+        response = response.json()
+
+        total_amount = response["total_amount"]
+    except:
+        logging.error("Cant get total profit")
+        total_amount = "המידע לא זמין"
     return total_amount
 
 
 def get_token() -> str:
-    headers = {
-        'authority': 'arboxserver.arboxapp.com',
-        'accept': 'application/json, text/plain, */*',
-        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
-        'content-type': 'application/json',
-        'lang': 'he',
-        'manage': 'system',
-        'origin': 'https://manage.arboxapp.com',
-        'referer': 'https://manage.arboxapp.com/',
-        'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Linux"',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-site',
-        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    }
+    try:
+        headers = {
+            'authority': 'arboxserver.arboxapp.com',
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
+            'content-type': 'application/json',
+            'lang': 'he',
+            'manage': 'system',
+            'origin': 'https://manage.arboxapp.com',
+            'referer': 'https://manage.arboxapp.com/',
+            'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Linux"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        }
 
-    params = {
-        'XDEBUG_SESSION_START': 'PHPSTORM',
-    }
+        params = {
+            'XDEBUG_SESSION_START': 'PHPSTORM',
+        }
 
-    json_data = {
-        'email': mail,
-        'password': arbox_password,
-    }
+        json_data = {
+            'email': mail,
+            'password': arbox_password,
+        }
 
-    response = requests.post('https://arboxserver.arboxapp.com/api/v2/login', params=params, headers=headers, json=json_data)
-    if response.status_code != 200:
-        print("problem in get token:")
-        print(response.status_code)
-        print(response.text)
-    token = response.json()["token"]
+        response = requests.post('https://arboxserver.arboxapp.com/api/v2/login', params=params, headers=headers, json=json_data)
+        if response.status_code != 200:
+            print("problem in get token:")
+            print(response.status_code)
+            print(response.text)
+        token = response.json()["token"]
+    except:
+        logging.error("Cant get token")
+        token = None
     return token
 
 
 def get_selling_items():
-    headers = {
-        'authority': 'arboxserver.arboxapp.com',
-        'accept': 'application/json, text/plain, */*',
-        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
-        'content-type': 'application/json',
-        'lang': 'he',
-        'manage': 'system',
-        'origin': 'https://manage.arboxapp.com',
-        'referer': 'https://manage.arboxapp.com/',
-        'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Linux"',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-site',
-        'token': token,
-        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    }
+    try:
+        headers = {
+            'authority': 'arboxserver.arboxapp.com',
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
+            'content-type': 'application/json',
+            'lang': 'he',
+            'manage': 'system',
+            'origin': 'https://manage.arboxapp.com',
+            'referer': 'https://manage.arboxapp.com/',
+            'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Linux"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'token': token,
+            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        }
 
-    params = {
-        'XDEBUG_SESSION_START': 'PHPSTORM',
-    }
+        params = {
+            'XDEBUG_SESSION_START': 'PHPSTORM',
+        }
 
-    json_data = {
-        'action': None,
-        'created_by_user': None,
-        'from_date': yesterday_format,
-        'to_date': yesterday_format,
-        'location_box_id': None,
-        'report_type': 'detailedReport',
-        'sub_action': None,
-    }
+        json_data = {
+            'action': None,
+            'created_by_user': None,
+            'from_date': yesterday_format,
+            'to_date': yesterday_format,
+            'location_box_id': None,
+            'report_type': 'detailedReport',
+            'sub_action': None,
+        }
 
-    response = requests.post(
-        'https://arboxserver.arboxapp.com/api/manage/v2/reports/salesReport',
-        params=params,
-        headers=headers,
-        json=json_data,
-    )
+        response = requests.post(
+            'https://arboxserver.arboxapp.com/api/manage/v2/reports/salesReport',
+            params=params,
+            headers=headers,
+            json=json_data,
+        )
 
 
-    response = response.json()
+        response = response.json()
+    except:
+        logging.error("Cant get selling items")
+        response = None
     return response
 
 
 def get_number_of_injuries():
-    response = requests.get(f"https://api.jotform.com/form/{formID}/submissions?apiKey={apiKey}")
-    data = response.json()["content"]
-    count = 0
-    for submission in data:
-        date_happened = submission["created_at"][0:10]
-        if date_happened == yesterday_format:
-            count += 1
+    try:
+        response = requests.get(f"https://api.jotform.com/form/{formID}/submissions?apiKey={apiKey}")
+        data = response.json()["content"]
+        count = 0
+        for submission in data:
+            date_happened = submission["created_at"][0:10]
+            if date_happened == yesterday_format:
+                count += 1
+    except:
+        logging.error("Cant get number of injuries")
+        count = None
     return count
 
 
@@ -229,117 +244,138 @@ def entrence():
 
 
 def get_all_active_user(token):
-    headers = {
-        'authority': 'arboxserver.arboxapp.com',
-        'accept': 'application/json, text/plain, */*',
-        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
-        'content-type': 'application/json',
-        'lang': 'he',
-        'manage': 'system',
-        'origin': 'https://manage.arboxapp.com',
-        'referer': 'https://manage.arboxapp.com/',
-        'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Linux"',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-site',
-        'token': token,
-        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    }
+    try:
+        headers = {
+            'authority': 'arboxserver.arboxapp.com',
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
+            'content-type': 'application/json',
+            'lang': 'he',
+            'manage': 'system',
+            'origin': 'https://manage.arboxapp.com',
+            'referer': 'https://manage.arboxapp.com/',
+            'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Linux"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'token': token,
+            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        }
 
-    params = {
-        'XDEBUG_SESSION_START': 'PHPSTORM',
-    }
+        params = {
+            'XDEBUG_SESSION_START': 'PHPSTORM',
+        }
 
-    json_data = {
-        'reportType': 'detailedReport',
-        'locationBox': None,
-    }
+        json_data = {
+            'reportType': 'detailedReport',
+            'locationBox': None,
+        }
 
-    response = requests.post(
-        'https://arboxserver.arboxapp.com/api/manage/v2/reports/activeMembershipsReport',
-        params=params,
-        headers=headers,
-        json=json_data,
-    )
+        response = requests.post(
+            'https://arboxserver.arboxapp.com/api/manage/v2/reports/activeMembershipsReport',
+            params=params,
+            headers=headers,
+            json=json_data,
+        )
+        return response.json()
+    except:
+        logging.error("Cant get active user")
+        return None
 
-    return response.json()
+
+
 
 
 def count_member_type(active_member:dict, membership_type:list) -> int:
-    membership_count = 0
-    for client in active_member:
-        if client["membership_type"] in membership_type:
-            membership_count += 1
+    try:
+        membership_count = 0
+        for client in active_member:
+            if client["membership_type"] in membership_type:
+                membership_count += 1
+    except:
+        logging.error("Cant count member type")
+        membership_count= None
     return membership_count
 
 
 def get_amount_of_spesific_item(wanted_item, selling_list):
-    count = 0
-    for item in selling_list:
-        if item["membership_type_name"] == wanted_item:
-            count += 1
+    try:
+        count = 0
+        for item in selling_list:
+            if item["membership_type_name"] == wanted_item:
+                count += 1
+    except:
+        count = 0
+        logging.error(f"Cant get amount of: {wanted_item}")
     return count
 
 
-def number_of_child_in_class(members_list):
-    classes_count = 0
-    for client in active_members:
-        if client["department_name"] == "חוגים":
-            if client["membership_type"] != "חוג עובדים":
-                classes_count += 1
+def number_of_child_in_class(active_members):
+    try:
+        classes_count = 0
+        for client in active_members:
+            if client["department_name"] == "חוגים":
+                if client["membership_type"] != "חוג עובדים":
+                    classes_count += 1
+    except:
+        logging.error("Cant count number of child in class")
+        classes_count = "אין מידע"
     return classes_count
 
 
 def get_new_client(token):
+    try:
 
-    headers = {
-        'authority': 'arboxserver.arboxapp.com',
-        'accept': 'application/json, text/plain, */*',
-        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
-        'content-type': 'application/json',
-        'lang': 'he',
-        'manage': 'system',
-        'origin': 'https://manage.arboxapp.com',
-        'referer': 'https://manage.arboxapp.com/',
-        'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Linux"',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-site',
-        'token': token,
-        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    }
+        headers = {
+            'authority': 'arboxserver.arboxapp.com',
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
+            'content-type': 'application/json',
+            'lang': 'he',
+            'manage': 'system',
+            'origin': 'https://manage.arboxapp.com',
+            'referer': 'https://manage.arboxapp.com/',
+            'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Linux"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'token': token,
+            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        }
 
-    params = {
-        'XDEBUG_SESSION_START': 'PHPSTORM',
-    }
+        params = {
+            'XDEBUG_SESSION_START': 'PHPSTORM',
+        }
 
-    json_data = {
-        'dateOf': None,
-        'filterDatesBy': 'signedDate',
-        'formType': 'MEDICALCERT',
-        'fromDateFilter': yesterday_format,
-        'toDateFilter': yesterday_format,
-        'location': None,
-        'userType': 'members',
-    }
+        json_data = {
+            'dateOf': None,
+            'filterDatesBy': 'signedDate',
+            'formType': 'MEDICALCERT',
+            'fromDateFilter': yesterday_format,
+            'toDateFilter': yesterday_format,
+            'location': None,
+            'userType': 'members',
+        }
 
-    response = requests.post(
-        'https://arboxserver.arboxapp.com/api/manage/v2/reports/signedFormsReport',
-        params=params,
-        headers=headers,
-        json=json_data,
-    )
+        response = requests.post(
+            'https://arboxserver.arboxapp.com/api/manage/v2/reports/signedFormsReport',
+            params=params,
+            headers=headers,
+            json=json_data,
+        )
 
-    response = response.json()
+        response = response.json()
 
-    count_new_client = 0
-    for i in response:
-        if i["name"] == "טופס אישור השתתפות":
-            count_new_client += 1
+        count_new_client = 0
+        for i in response:
+            if i["name"] == "טופס אישור השתתפות":
+                count_new_client += 1
+    except:
+        count_new_client = "המידע לא זמין"
     return count_new_client
 
 
@@ -380,15 +416,13 @@ def send_whatsapp(people):
     response = requests.post(url, headers=headers, data=json.dumps(data))
 
     if response.status_code == 200:
-        print("Success!")
-        print(response.json())
+        logging.info(f"Success response: {response.json()}")
+
     else:
-        print(f"Failed with status code: {response.status_code}")
-        print(response.text)
+        logging.error(f"Failed with status code: {response.status_code}")
 
 
 token = get_token()
-
 active_members = get_all_active_user(token)
 monthly_members_count = count_member_type(active_members, config.all_renewable)
 list_of_selling_items = get_selling_items()
