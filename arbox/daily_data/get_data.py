@@ -1,13 +1,16 @@
 import logging
-
 import requests
 from datetime import datetime, timedelta
 import os
 import config
 import json
 
-send_message_to = {"ilai": "+972527808418", "oren":"+972502239911",
-"shahar":"+972522492230", "naama": "+972547833192"}
+send_message_to = {
+    # "ilai": "+972527808418",
+    # "oren":"+972502239911",
+    # "shahar":"+972522492230",
+     "naama": "+972547833192"
+                   }
 
 
 
@@ -387,9 +390,9 @@ def send_whatsapp(people ,monthly_members_count, money_paid, introduction_card,b
         "to": people,
         "type": "template",
         "template": {
-            "name": "daily_message",
+            "name": "order_message",
             "language": {
-                "code": "en_US"
+                "code": "en"
             },
             "components": [
                 {
@@ -415,6 +418,7 @@ def send_whatsapp(people ,monthly_members_count, money_paid, introduction_card,b
         logging.info(f"Success response: {response.json()}")
     else:
         logging.error(f"Failed with status code: {response.status_code}")
+        logging.error(f"text: {response.json()}")
 
 def main():
     token = get_token()
