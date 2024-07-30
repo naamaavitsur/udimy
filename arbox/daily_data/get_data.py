@@ -6,13 +6,11 @@ import config
 import json
 
 send_message_to = {
-    "ilai": "+972527808418",
-    "oren":"+972502239911",
-    "shahar":"+972522492230",
+    # "ilai": "+972527808418",
+    # "oren":"+972502239911",
+    # "shahar":"+972522492230",
      # "naama": "+972547833192"
                    }
-
-
 
 apiKey = os.getenv("JF_API")
 formID = "231333863831051"
@@ -22,6 +20,7 @@ auth_token = os.getenv("AU_TO")
 mail = os.getenv("MAIL")
 arbox_password = os.getenv("PASS")
 whatsapp_token_permenent = os.getenv("FACBOOK_TOKEN_PERMENENT")
+arbox_api = os.getenv("ARBOX_API")
 
 today = datetime.now()
 today_format = today.strftime("%Y-%m-%d")
@@ -35,21 +34,8 @@ message_date_formate =  yesterday.strftime("%d.%m.%Y")
 def get_total_profit(token):
     try:
         headers = {
-            'authority': 'api.arboxapp.com',
-            'accept': 'application/json, text/plain, */*',
-            'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
             'accesstoken': token,
-            'boxfk': '845',
-            'content-type': 'application/json;charset=UTF-8',
-            'origin': 'https://angularmanage.arboxapp.com',
-            'referer': 'https://angularmanage.arboxapp.com/',
-            'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Linux"',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-site',
-            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'boxfk': '1116',
         }
         json_data = {
             'init': True,
@@ -69,6 +55,7 @@ def get_total_profit(token):
         response = response.json()
 
         total_amount = response["total_amount"]
+        print(total_amount)
     except:
         logging.error("Cant get total profit")
         total_amount = "המידע לא זמין"
@@ -77,34 +64,14 @@ def get_total_profit(token):
 
 def get_token() -> str:
     try:
-        headers = {
-            'authority': 'arboxserver.arboxapp.com',
-            'accept': 'application/json, text/plain, */*',
-            'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
-            'content-type': 'application/json',
-            'lang': 'he',
-            'manage': 'system',
-            'origin': 'https://manage.arboxapp.com',
-            'referer': 'https://manage.arboxapp.com/',
-            'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Linux"',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-site',
-            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-        }
 
-        params = {
-            'XDEBUG_SESSION_START': 'PHPSTORM',
-        }
 
         json_data = {
             'email': mail,
             'password': arbox_password,
         }
 
-        response = requests.post('https://arboxserver.arboxapp.com/api/v2/login', params=params, headers=headers, json=json_data)
+        response = requests.post('https://arboxserver.arboxapp.com/api/v2/login',json=json_data)
         if response.status_code != 200:
             print("problem in get token:")
             print(response.status_code)
@@ -119,26 +86,7 @@ def get_token() -> str:
 def get_selling_items(token):
     try:
         headers = {
-            'authority': 'arboxserver.arboxapp.com',
-            'accept': 'application/json, text/plain, */*',
-            'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
-            'content-type': 'application/json',
-            'lang': 'he',
-            'manage': 'system',
-            'origin': 'https://manage.arboxapp.com',
-            'referer': 'https://manage.arboxapp.com/',
-            'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Linux"',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-site',
             'token': token,
-            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-        }
-
-        params = {
-            'XDEBUG_SESSION_START': 'PHPSTORM',
         }
 
         json_data = {
@@ -153,13 +101,83 @@ def get_selling_items(token):
 
         response = requests.post(
             'https://arboxserver.arboxapp.com/api/manage/v2/reports/salesReport',
-            params=params,
             headers=headers,
             json=json_data,
         )
 
 
         response = response.json()
+    except:
+        logging.error("Cant get selling items")
+        response = None
+    return response
+
+
+def change_gym(token):
+    headers = {
+        'authority': 'arboxserver.arboxapp.com',
+        'accept': 'application/json, text/plain, */*',
+        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,he;q=0.7',
+        'content-type': 'application/json',
+        'lang': 'he',
+        'manage': 'system',
+        'origin': 'https://manage.arboxapp.com',
+        'referer': 'https://manage.arboxapp.com/',
+        'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Linux"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-site',
+        'token': token,
+        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+    }
+
+    params = {
+        'XDEBUG_SESSION_START': 'PHPSTORM',
+    }
+
+    json_data = {
+        'boxesId': 1116,
+    }
+
+    response = requests.post(
+        'https://arboxserver.arboxapp.com/api/manage/v2/changeBox',
+        params=params,
+        headers=headers,
+        json=json_data,
+
+    )
+    new_token = response.json()["token"]
+    return new_token
+
+def get_selling_items_ashdod(token):
+
+    try:
+        headers = {
+            'token': token,
+        }
+
+        json_data = {
+            'action': None,
+            'created_by_user': None,
+            'from_date': yesterday_format,
+            'to_date': yesterday_format,
+            'location_box_id': None,
+            'report_type': 'detailedReport',
+            'sub_action': None,
+        }
+
+        response = requests.post(
+            'https://arboxserver.arboxapp.com/api/manage/v2/reports/salesReport',
+            headers=headers,
+            json=json_data,
+        )
+
+
+        response = response.json()
+        print(f"nethanya: {response}")
+        print(len( f"nethanya: {response}"))
     except:
         logging.error("Cant get selling items")
         response = None
@@ -378,6 +396,21 @@ def get_new_client(token):
     return count_new_client
 
 
+def check_if_allow_sms(mail):
+    try:
+        response = requests.get(url="https://api.arboxapp.com/index.php/api/v2/searchUser",
+                                headers={"apiKey": arbox_api},
+                                params= {"user": mail})
+        response = response.json()
+        print(response)
+        for person in response:
+            allow_sms = person.get("allow_sms")
+            return allow_sms
+    except:
+        logging.error(f"cant check if this person:  {mail}. allow_sms: {response}")
+        return False
+
+
 def send_whatsapp(people ,monthly_members_count, money_paid, introduction_card,basics_workshop, class_kids, new_client, number_of_injuries ):
     url = 'https://graph.facebook.com/v20.0/317183528149149/messages'
     headers = {
@@ -420,6 +453,56 @@ def send_whatsapp(people ,monthly_members_count, money_paid, introduction_card,b
         logging.error(f"Failed with status code: {response.status_code}")
         logging.error(f"text: {response.json()}")
 
+
+def get_List_of_buyers(selling_items, wanted_item):
+    list_of_buyers = []
+    for item in selling_items:
+        if item["membership_type_name"] == wanted_item:
+            first_name = item["first_name"]
+            phone = item["phone"]
+            mail = item["email"]
+            allow_sms = check_if_allow_sms(mail)
+            person_dict = {"first name": first_name, "phone": phone, "mail": mail, "allow_sms": allow_sms}
+            list_of_buyers.append(person_dict)
+    return list_of_buyers
+
+
+def send_whatsapp_after_buy(phone_number, for_whom, temaplate_to_send):
+    url = 'https://graph.facebook.com/v20.0/317183528149149/messages'
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {whatsapp_token_permenent}'
+    }
+
+    data = {
+        "messaging_product": "whatsapp",
+        "to": phone_number,
+        "type": "template",
+        "template": {
+            "name": temaplate_to_send,
+            "language": {
+                "code": "en"
+            },
+            "components": [
+                {
+                    "type": "body",
+                    "parameters": [
+                        {"type": "text", "text": for_whom},
+                    ]
+                }
+            ]
+        }
+    }
+
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+
+    if response.status_code == 200:
+        logging.info(f"Success response: {response.json()}")
+    else:
+        logging.error(f"Failed with status code: {response.status_code}")
+        logging.error(f"text: {response.json()}")
+
+
 def main():
     token = get_token()
     active_members = get_all_active_user(token)
@@ -433,6 +516,8 @@ def main():
     number_of_injuries = get_number_of_injuries()
     for people in send_message_to.values():
         send_whatsapp(people ,monthly_members_count, money_paid, introduction_card,basics_workshop, class_kids, new_client, number_of_injuries)
+
+
 # message = (f"עדכון יומי:🦧\n"
 #            f"{yesterday_format}\n"
 #            f"מספר מנויים: {monthly_members_count}\n"
@@ -443,10 +528,14 @@ def main():
 #            f"לקוחות חדשים: {new_client}\n"
 #            f"דיווחי פציעה: {number_of_injuries}\n")
 
-
 if __name__ == '__main__':
-    main()
-
+    # main()
+    token = get_token()
+    list_of_selling_items = get_selling_items(token)
+    new_token = change_gym(token)
+    get_selling_items(new_token)
+    # list_of_buyers = get_List_of_buyers(list_of_selling_items, "כניסה לבולדר")
+    # print(list_of_buyers)
 
 
 
